@@ -13,6 +13,7 @@ NAME_BONUS = philo_bonus
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 LIB    = -lpthread
+DEBUG  = -g3 -fsanitize=address
 
 all: $(NAME)
 
@@ -20,7 +21,7 @@ all: $(NAME)
 	$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
 
 $(NAME): $(OBJECT_FILE)
-	$(CC) $(CFLAGS) $(LIB) -o $(MANDATORY_PATH)/$(NAME) $(OBJECT_FILE)
+	$(CC) $(CFLAGS) $(LIB) $(DEBUG) -o $(MANDATORY_PATH)/$(NAME) $(OBJECT_FILE)
 
 bonus: $(OBJECT_FILE_BONUS)
 	$(CC) $(CFLAGS) $(LIB) -o $(BONUS_PATH)/$(NAME_BONUS) $(OBJECT_FILE_BONUS)
