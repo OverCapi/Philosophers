@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 13:01:09 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/09 14:17:58 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/09 17:44:54 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,20 @@ int	init_philo_child(t_philo_main *philo_main)
 	{
 		philo_main->philo[n].index = n;
 		philo_main->philo[n].philo_main = philo_main;
+		philo_main->philo[n].right = &philo_main->svar.fork[n];
+		if (n + 1 >= philo_main->arg.nb_philo)
+		{
+			if (philo_main->philo[n - 1].state == 1)
+				philo_main->philo[n].state = 2;
+			else
+				philo_main->philo[n].state = 1;
+		}
+		else
+			philo_main->philo[n].state = n % 3;
+		if (n - 1 >= 0)
+			philo_main->philo[n].left = &philo_main->svar.fork[n - 1];
+		else
+			philo_main->philo[n].left = &philo_main->svar.fork[philo_main->arg.nb_philo - 1];
 		if (pthread_create(&philo_main->philo[n].th, NULL, &routine, &philo_main->philo[n]) != 0)
 			return (free(philo_main->philo), 0);
 		n++;
@@ -63,7 +77,8 @@ int	init_mutex(t_philo_main *philo_main)
 {
 	int	n;
 
-	philo_main->svar.fork = (t_fork *)malloc(philo_main->arg.nb_philo * sizeof(t_fork));
+	philo_main->svar.fork = (t_fork *)malloc(philo_main->arg.nb_philo \
+		* sizeof(t_fork));
 	if (!philo_main->svar.fork)
 		return ((void)printf("Error : %s", ERROR_ALLOC), 0);
 	n = 0;
@@ -72,6 +87,13 @@ int	init_mutex(t_philo_main *philo_main)
 		if (pthread_mutex_init(&philo_main->svar.fork[n].mutex, NULL) != 0)
 			return (destroy_mutex(philo_main, n));
 		n++;
+	}
+	if (pthread_mutex_init(&philo_main->svar.m_running, NULL) != 0)
+		return (destroy_mutex(philo_main, n));
+	if (pthread_mutex_init(&philo_main->svar.m_nb_fork_used, NULL) != 0)
+	{
+		pthread_mutex_destroy(&philo_main->svar.m_running);
+		return (destroy_mutex(philo_main, n));
 	}
 	return (1);
 }
