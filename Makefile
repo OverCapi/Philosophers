@@ -1,5 +1,7 @@
 MANDATORY_PATH = ./philo
 SRCS_FILE = $(MANDATORY_PATH)/philo.c \
+			$(MANDATORY_PATH)/init.c \
+			$(MANDATORY_PATH)/run.c \
 			$(MANDATORY_PATH)/utils/ft_atoi_safe.c
 
 BONUS_PATH = ./philo_bonus
@@ -18,13 +20,13 @@ DEBUG  = -g3 -fsanitize=address
 all: $(NAME)
 
 .c.o:
-	$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
+	$(CC) $(CFLAGS) $(DEBUG) -c $< -o $(<:.c=.o)
 
 $(NAME): $(OBJECT_FILE)
 	$(CC) $(CFLAGS) $(LIB) $(DEBUG) -o $(MANDATORY_PATH)/$(NAME) $(OBJECT_FILE)
 
 bonus: $(OBJECT_FILE_BONUS)
-	$(CC) $(CFLAGS) $(LIB) -o $(BONUS_PATH)/$(NAME_BONUS) $(OBJECT_FILE_BONUS)
+	$(CC) $(CFLAGS) $(LIB) $(DEBUG) -o $(BONUS_PATH)/$(NAME_BONUS) $(OBJECT_FILE_BONUS)
 
 clean:
 	rm -f $(OBJECT_FILE) $(OBJECT_FILE_BONUS)

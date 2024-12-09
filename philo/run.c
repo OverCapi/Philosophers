@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   run.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/06 13:11:20 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/09 13:41:39 by llemmel          ###   ########.fr       */
+/*   Created: 2024/12/09 13:03:04 by llemmel           #+#    #+#             */
+/*   Updated: 2024/12/09 13:39:52 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, char **argv)
+void	*routine(void *arg)
 {
-	t_philo_main	philo_main;
+	t_philo_child	*philo;
 
-	memset(&philo_main, 0, sizeof(philo_main));
-	if (!init_arg(&philo_main.arg, argc, argv))
-		return (1);
-	if (!init_philo_main(&philo_main))
-		return (1);
-	run(&philo_main);
-	if (!join_philo(&philo_main))
-		return (1);
-	destroy_mutex(&philo_main, philo_main.arg.nb_philo);
-	free(philo_main.philo);
-	return (0);
+	philo = (t_philo_child *)arg;
+	printf("index of thread : %d\n", philo->index);
+	return (NULL);
+}
+
+void	run(t_philo_main *philo_main)
+{
+	(void)philo_main;
+	// while (1)
+	// 	continue ;
 }
