@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 13:20:28 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/09 13:41:29 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/09 14:43:36 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <sys/time.h>
 
 # define ERROR_ARG "usage : ./philo \
 number_of_philosophers \
@@ -66,10 +67,10 @@ typedef struct s_share_var
 
 typedef struct s_philo_main
 {
-	t_arg			arg;
-	t_philo_child	*philo;
-	int				time;
-	t_share_var		svar;
+	t_arg				arg;
+	t_philo_child		*philo;
+	unsigned long int	time;
+	t_share_var			svar;
 }	t_philo_main;
 
 /* INIT */
@@ -81,6 +82,6 @@ int		destroy_mutex(t_philo_main *philo_main, int n);
 
 /* RUN */
 void	*routine(void *arg);
-void	run(t_philo_main *philo_main);
+int		run(t_philo_main *philo_main);
 
 #endif

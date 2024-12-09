@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 13:01:09 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/09 13:45:50 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/09 14:17:58 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	init_philo_child(t_philo_main *philo_main)
 	while (n < philo_main->arg.nb_philo)
 	{
 		philo_main->philo[n].index = n;
+		philo_main->philo[n].philo_main = philo_main;
 		if (pthread_create(&philo_main->philo[n].th, NULL, &routine, &philo_main->philo[n]) != 0)
 			return (free(philo_main->philo), 0);
 		n++;
