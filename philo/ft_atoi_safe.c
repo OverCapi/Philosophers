@@ -5,21 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/06 13:12:15 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/06 13:59:57 by llemmel          ###   ########.fr       */
+/*   Created: 2024/12/10 09:25:15 by llemmel           #+#    #+#             */
+/*   Updated: 2024/12/10 09:33:58 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
-
-static int	check_overflow(long long int nb, int sign)
-{
-	if (sign == 1 && nb > 2147483647)
-		return (-1);
-	else if (sign == -1 && (nb < -2147483648 || nb >= 2147483647))
-		return (-1);
-	return (0);
-}
+#include "philo.h"
 
 static int	ft_iswhite_space(char c)
 {
@@ -31,11 +22,20 @@ static int	ft_isdigit(char c)
 	return (c >= '0' && c <= '9');
 }
 
+static int	check_overflow(long long int nb, int sign)
+{
+	if (sign == 1 && nb > 2147483647)
+		return (-1);
+	else if (sign == -1 && (nb < -2147483648 || nb >= 2147483647))
+		return (-1);
+	return (0);
+}
+
 int	ft_atoi_safe(const char *nptr)
 {
-	int		nb;
-	int		sign;
-	int		i;
+	int	nb;
+	int	sign;
+	int	i;
 
 	i = 0;
 	nb = 0;
