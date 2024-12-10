@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 09:15:55 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/10 11:02:07 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/10 16:18:01 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ time_to_sleep \
 # define ARG_VALUE_ERROR "Parameters must be greater or equal than 0"
 # define ALLOC_ERROR "Memory allocation failed"
 # define INIT_ERROR "Initialization failed"
+# define THREAD_ERROR "Thread creation failed"
 
 # include <stdio.h>
 # include <pthread.h>
@@ -46,6 +47,9 @@ typedef struct s_philo_main	t_philo_main;
 typedef struct s_philo
 {
 	pthread_t		th;
+	int				index;
+	pthread_mutex_t	mtx;
+	int				is_ready;
 	t_fork			*right;
 	t_fork			*left;
 	t_philo_main	*philo_main;
@@ -53,13 +57,23 @@ typedef struct s_philo
 
 typedef struct s_philo_main
 {
-	t_arg	arg;
-	t_philo	*philos;
-	t_fork	*forks;
+	t_arg			arg;
+	t_philo			*philos;
+	t_fork			*forks;
+	size_t			time;
+	int				is_running;
+	pthread_mutex_t	mtx;
 }	t_philo_main;
 
 /* UTILS */
 int	ft_atoi_safe(const char *nptr);
 int	print_error(char *msg, int ret_value);
+
+/* INIT */
+int	init(t_philo_main *philo_main);
+
+/* MUTEX */
+int	set_int_mutex(pthread_mutex_t *mtx, int *ptr, int value);
+int	get_int_mutex(pthread_mutex_t *mtx, int *ptr, int *err);
 
 #endif

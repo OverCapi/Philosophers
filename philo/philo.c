@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 09:22:18 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/10 11:02:12 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/10 15:33:00 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,34 +30,6 @@ int	parse_arg(t_arg *arg, int argc, char **argv)
 	return (0);
 }
 
-int	init_fork(t_philo_main *philo_main)
-{
-	int	i;
-	int	nb_philo;
-
-	i = 0;
-	nb_philo = philo_main->arg.nb_philo;
-	philo_main->forks = (t_fork *)malloc(nb_philo * sizeof(t_fork));
-	if (!philo_main->forks)
-		return (print_error(ALLOC_ERROR, 0));
-	while (i < nb_philo)
-	{
-		if (pthread_mutex_init(&philo_main->forks[i], NULL) != 0)
-		{
-			destroy_mutex(philo_main->forks, i);
-			return (print_error(INIT_ERROR, 0));
-		}
-		i++;
-	}
-}
-
-int	init(t_philo_main *philo_main)
-{
-	if (!init_fork(philo_main))
-		return (0);
-	return (1);
-}
-
 int	main(int argc, char **argv)
 {
 	t_philo_main	philo_main;
@@ -67,5 +39,8 @@ int	main(int argc, char **argv)
 		return (1);
 	if (!init(&philo_main))
 		return (1);
+	if (!run(&philo_main))
+		return (1);
+	clean(&philo_main);
 	return (0);
 }
