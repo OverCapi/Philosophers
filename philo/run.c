@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 15:31:14 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/10 17:40:29 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/10 17:42:59 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,6 @@ int	run(t_philo_main *philo_main)
 {
 	if (!create_threads(philo_main))
 		return (0);
+	// need to join threads
 	return (1);
 }
