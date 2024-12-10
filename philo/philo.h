@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 09:15:55 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/10 16:18:01 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/10 17:34:56 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ time_to_sleep \
 # define ALLOC_ERROR "Memory allocation failed"
 # define INIT_ERROR "Initialization failed"
 # define THREAD_ERROR "Thread creation failed"
+
+# define EAT_STATUS "is eating"
+# define SLEEP_STATUS "is sleeping"
+# define THINK_STATUS "is thinking"
+# define FORK_STATUS "has taken a fork"
+# define DIED_STATUS "died"
 
 # include <stdio.h>
 # include <pthread.h>
