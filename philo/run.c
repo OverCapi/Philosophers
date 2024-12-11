@@ -6,18 +6,22 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 15:31:14 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/11 17:35:47 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/11 18:48:21 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-size_t	get_time_ms(void)
+size_t	get_time_ms(t_philo *philo)
 {
 	struct timeval	time;
+	size_t			current_time;
 
 	gettimeofday(&time, NULL);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+	current_time = time.tv_sec * 1000 + time.tv_usec / 1000;
+	if (philo->philo_main->start_time == 0)
+		philo->philo_main->start_time = current_time;
+	return (current_time - philo->philo_main->start_time);
 }
 
 int	eat_target_reached(t_philo *philo)
@@ -27,6 +31,7 @@ int	eat_target_reached(t_philo *philo)
 
 int	philo_dead(t_philo *philo)
 {
+	printf("philo %d : philo_dead : %ld, (%ld)\n", philo->index,get_time_ms() - philo->last_time_eat, philo->philo_main->arg.time_to_die);
 	if (get_time_ms() - philo->last_time_eat >= philo->philo_main->arg.time_to_die)
 	{
 		pthread_mutex_lock(&philo->mtx);
@@ -55,12 +60,12 @@ int	is_finished(t_philo *philo)
 {
 	int	ret;
 
-	pthread_mutex_lock(&philo->philo_main->mtx);
-	if (philo->philo_main->arg.max_eat == -1)
+	printf("philo %d : is_finished?\n", philo->index);
+	if (philo->philo_main->arg.max_eat != -1)
 		ret = eat_target_reached(philo) || philo_dead(philo) || error(philo);
 	else
 		ret = philo_dead(philo) || error(philo);
-	pthread_mutex_unlock(&philo->philo_main->mtx);
+	printf("philo %d : finished : %d\n", philo->index, ret);
 	return (ret);
 }
 
@@ -78,6 +83,7 @@ int	print_status(t_philo *philo, char *status)
 
 int	eat_routine(t_philo *philo)
 {
+	printf("philo %d start eat\n", philo->index);
 	if (philo->index % 2 == 0)
 		pthread_mutex_lock(&philo->right->mtx);
 	else
@@ -130,7 +136,23 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while (is_finished(philo))
+	pthread_mutex_lock(&philo->mtx);
+	philo->is_ready = 1;
+	pthread_mutex_unlock(&philo->mtx);
+	printf("philo %d ready\n", philo->index);
+	while (1)
+	{
+		pthread_mutex_lock(&philo->philo_main->mtx);
+		if (philo->philo_main->is_running)
+		{
+			pthread_mutex_unlock(&philo->philo_main->mtx);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->philo_main->mtx);
+		// printf("philo %d waiting for monitoring to start\n", philo->index);
+	}
+	printf("philo %d start\n", philo->index);
+	while (!is_finished(philo))
 	{
 		if (is_dead(philo))
 			break ;
@@ -138,6 +160,7 @@ void	*routine(void *arg)
 		sleep_routine(philo);
 		think_routine(philo);
 	}
+	printf("philo %d end\n", philo->index);
 	return (NULL);
 }
 

@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 09:15:55 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/11 17:34:41 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/11 18:47:30 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ time_to_sleep \
 
 typedef struct s_arg
 {
-	int		nb_philo;
+	size_t	nb_philo;
 	size_t	time_to_die;
 	size_t	time_to_eat;
 	size_t	time_to_sleep;
@@ -62,7 +62,7 @@ typedef struct s_philo
 	int				is_dead;
 	int				nb_eat;
 	int				is_ready;
-	size_t			last_time_eat;
+	int				last_time_eat;
 	t_fork			*right;
 	t_fork			*left;
 	t_philo_main	*philo_main;
@@ -83,6 +83,7 @@ typedef struct s_philo_main
 	t_philo			*philos;
 	t_fork			*forks;
 	t_monitoring	monitoring;
+	size_t			start_time;
 	size_t			time;
 	int				is_running;
 	int				error;
@@ -92,7 +93,7 @@ typedef struct s_philo_main
 /* UTILS */
 int	ft_atoi_safe(const char *nptr);
 int	print_error(char *msg, int ret_value);
-size_t	get_time_ms(void);
+int	get_time_ms(void);
 
 /* INIT */
 int	init(t_philo_main *philo_main);

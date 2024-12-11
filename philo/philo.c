@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 09:22:18 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/11 14:17:34 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/11 17:44:58 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	parse_arg(t_arg *arg, int argc, char **argv)
 {
 	if (argc != 5 && argc != 6)
-		return (print_error(ARG_ERROR, 1));
+		return (print_error(ARG_ERROR, 0));
 	arg->nb_philo = ft_atoi_safe(argv[1]);
 	arg->time_to_die = ft_atoi_safe(argv[2]);
 	arg->time_to_eat = ft_atoi_safe(argv[3]);
@@ -27,7 +27,7 @@ int	parse_arg(t_arg *arg, int argc, char **argv)
 	if (arg->nb_philo <= 0 || arg->time_to_die <= 0 || arg->time_to_eat <= 0 \
 		|| arg->time_to_sleep <= 0 || (arg->max_eat < -1 || arg->max_eat == 0))
 		return (print_error(ARG_VALUE_ERROR, 0));
-	return (0);
+	return (1);
 }
 
 int	main(int argc, char **argv)

@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:56:27 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/11 14:20:55 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/11 18:49:13 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,6 @@ int	init(t_philo_main *philo_main)
 		return (print_error(INIT_ERROR, 0));
 	if (!init_philos(philo_main))
 		return (destroy_mutex(philo_main->forks, philo_main->arg.nb_philo), 0);
+	philo_main->start_time = get_time_ms();
 	return (1);
 }
