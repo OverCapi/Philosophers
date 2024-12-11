@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 15:31:14 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/11 14:14:21 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/11 14:19:36 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,26 @@
 
 int	print_status(t_philo *philo, char *status)
 {
+	(void)philo;
+	(void)status;
 	return (1);
 }
 
-int	eat(t_philo *philo)
+int	eat_routine(t_philo *philo)
 {
+	(void)philo;
 	return (1);
 }
 
-int	sleep(t_philo *philo)
+int	sleep_routine(t_philo *philo)
 {
+	(void)philo;
 	return (1);
 }
 
-int	think(t_philo *philo)
+int	think_routine(t_philo *philo)
 {
+	(void)philo;
 	return (1);
 }
 
@@ -61,7 +66,7 @@ int	run(t_philo_main *philo_main)
 {
 	if (!create_threads(philo_main))
 		return (0);
-	if (!join_threads(philo_main))
-		return (0);
+	// if (!join_threads(philo_main))
+	// 	return (0);
 	return (1);
 }

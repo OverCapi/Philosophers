@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 09:22:18 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/10 15:33:00 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/11 14:17:34 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,6 @@ int	main(int argc, char **argv)
 		return (1);
 	if (!run(&philo_main))
 		return (1);
-	clean(&philo_main);
+	//clean(&philo_main);
 	return (0);
 }

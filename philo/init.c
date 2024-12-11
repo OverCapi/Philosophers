@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:56:27 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/11 14:11:46 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/11 14:20:55 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	init_philo(t_philo_main *philo_main, int index)
 	nb_philo = philo_main->arg.nb_philo;
 	memset(&philo_main->philos[index], 0, sizeof(t_philo));
 	philo_main->philos[index].index = index;
-	philo_main->philos[index].philo_main = &philo_main;
+	philo_main->philos[index].philo_main = philo_main;
 	if (pthread_mutex_init(&philo_main->philos[index].mtx, NULL) != 0)
 		return (0);
 	philo_main->philos[index].right = &philo_main->forks[index];

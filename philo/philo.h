@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 09:15:55 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/11 14:05:31 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/11 14:20:30 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ time_to_sleep \
 # include <unistd.h>
 # include <sys/time.h>
 # include <string.h>
+# include <stdlib.h>
 
 typedef struct s_arg
 {
@@ -77,6 +78,8 @@ int	print_error(char *msg, int ret_value);
 
 /* INIT */
 int	init(t_philo_main *philo_main);
+
+int	run(t_philo_main *philo_main);
 
 /* MUTEX */
 int	set_int_mutex(pthread_mutex_t *mtx, int *ptr, int value);
