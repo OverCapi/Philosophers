@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 15:31:14 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/12 14:29:23 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/12 15:33:42 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	print_status(t_philo *philo, char *status)
 	if (is_finished(philo))
 		return (0);
 	pthread_mutex_lock(&philo->philo_main->can_write);
-	printf("%zums %d %s", time, philo->index, status);
+	printf("%zu %d %s", time, philo->index, status);
 	pthread_mutex_unlock(&philo->philo_main->can_write);
 	return (1);
 }
@@ -103,18 +103,29 @@ int	eat_routine(t_philo *philo)
 	else
 		pthread_mutex_lock(&philo->right->mtx);
 	if (!print_status(philo, FORK_STATUS))
+	{
+		pthread_mutex_unlock(&philo->left->mtx);
+		pthread_mutex_unlock(&philo->right->mtx);
 		return (0);
+	}
 	if (philo->index % 2 == 0)
 		pthread_mutex_lock(&philo->right->mtx);
 	else
 		pthread_mutex_lock(&philo->left->mtx);
 	if (!print_status(philo, FORK_STATUS))
+	{
+		pthread_mutex_unlock(&philo->left->mtx);
+		pthread_mutex_unlock(&philo->right->mtx);
 		return (0);
+	}
 	if (!print_status(philo, EAT_STATUS))
+	{
+		pthread_mutex_unlock(&philo->left->mtx);
+		pthread_mutex_unlock(&philo->right->mtx);
 		return (0);
+	}
 	pthread_mutex_lock(&philo->mtx);
 	philo->last_time_eat = get_time_ms(philo->philo_main);
-	// printf("philo %d : last_time_eat : %d\n", philo->index, philo->last_time_eat);
 	pthread_mutex_unlock(&philo->mtx);
 	usleep(philo->philo_main->arg.time_to_eat * 1000);
 	pthread_mutex_lock(&philo->mtx);
@@ -169,7 +180,6 @@ void	*routine(void *arg)
 			break ;
 		think_routine(philo);
 	}
-	printf("philo %d : finished\n", philo->index);
 	return (NULL);
 }
 
@@ -228,6 +238,5 @@ int	run(t_philo_main *philo_main)
 	start_monitoring(philo_main);
 	if (!join_threads(philo_main))
 		return (0);
-	printf("dinner finished\n");
 	return (1);
 }

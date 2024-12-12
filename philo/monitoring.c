@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:19:52 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/12 14:12:47 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/12 15:33:52 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,6 @@ void	*monitoring_routine(void *arg)
 			break ;
 		}
 	}
-	printf("monitoring finished\n");
 	return (NULL);
 }
 

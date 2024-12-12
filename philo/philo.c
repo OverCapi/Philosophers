@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 09:22:18 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/11 17:44:58 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/12 15:38:07 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,40 @@ int	parse_arg(t_arg *arg, int argc, char **argv)
 	return (1);
 }
 
+void	clean_philos(t_philo_main *philo_main)
+{
+	int	i;
+
+	i = 0;
+	while (i < philo_main->arg.nb_philo)
+	{
+		pthread_mutex_destroy(&philo_main->philos[i].mtx);
+		i++;
+	}
+	free(philo_main->philos);
+}
+
+void	clean_forks(t_philo_main *philo_main)
+{
+	int	i;
+
+	i = 0;
+	while (i < philo_main->arg.nb_philo)
+	{
+		pthread_mutex_destroy(&philo_main->forks[i].mtx);
+		i++;
+	}
+	free(philo_main->forks);
+}
+
+void	clean(t_philo_main *philo_main)
+{
+	pthread_mutex_destroy(&philo_main->mtx);
+	pthread_mutex_destroy(&philo_main->can_write);
+	clean_philos(philo_main);
+	clean_forks(philo_main);
+}
+
 int	main(int argc, char **argv)
 {
 	t_philo_main	philo_main;
@@ -41,6 +75,6 @@ int	main(int argc, char **argv)
 		return (1);
 	if (!run(&philo_main))
 		return (1);
-	//clean(&philo_main);
+	clean(&philo_main);
 	return (0);
 }
