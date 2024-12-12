@@ -6,14 +6,12 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 09:15:55 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/11 18:47:30 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/12 13:28:46 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
-
-# define MAX_INIT_TIME 10000000 // 10s in µs
 
 # define ARG_ERROR "Usage : ./philo number_of_philosophers \
 time_to_die \
@@ -26,11 +24,11 @@ time_to_sleep \
 # define THREAD_ERROR "Thread creation failed"
 # define JOIN_ERROR "Thread join failed"
 
-# define EAT_STATUS "is eating"
-# define SLEEP_STATUS "is sleeping"
-# define THINK_STATUS "is thinking"
-# define FORK_STATUS "has taken a fork"
-# define DIED_STATUS "died"
+# define EAT_STATUS "is eating\n"
+# define SLEEP_STATUS "is sleeping\n"
+# define THINK_STATUS "is thinking\n"
+# define FORK_STATUS "has taken a fork\n"
+# define DIED_STATUS "died\n"
 
 # include <stdio.h>
 # include <pthread.h>
@@ -41,11 +39,11 @@ time_to_sleep \
 
 typedef struct s_arg
 {
-	size_t	nb_philo;
-	size_t	time_to_die;
-	size_t	time_to_eat;
-	size_t	time_to_sleep;
-	int		max_eat;
+	long int	nb_philo;
+	long int	time_to_die;
+	long int	time_to_eat;
+	long int	time_to_sleep;
+	long int	max_eat;
 }	t_arg;
 
 typedef struct s_fork
@@ -87,13 +85,14 @@ typedef struct s_philo_main
 	size_t			time;
 	int				is_running;
 	int				error;
+	pthread_mutex_t	can_write;
 	pthread_mutex_t	mtx;
 }	t_philo_main;
 
 /* UTILS */
 int	ft_atoi_safe(const char *nptr);
 int	print_error(char *msg, int ret_value);
-int	get_time_ms(void);
+long int	get_time_ms(t_philo_main *philo_main);
 
 /* INIT */
 int	init(t_philo_main *philo_main);

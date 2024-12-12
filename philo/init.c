@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:56:27 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/11 18:49:13 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/12 13:26:47 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,20 @@ int	init(t_philo_main *philo_main)
 {
 	if (pthread_mutex_init(&philo_main->mtx, NULL) != 0)
 		return (0);
+	if (pthread_mutex_init(&philo_main->can_write, NULL) != 0)
+		return (pthread_mutex_destroy(&philo_main->mtx), 0);
 	if (!init_fork(philo_main))
+	{
+		pthread_mutex_destroy(&philo_main->mtx);
+		pthread_mutex_destroy(&philo_main->can_write);
 		return (print_error(INIT_ERROR, 0));
+	}
 	if (!init_philos(philo_main))
+	{
+		pthread_mutex_destroy(&philo_main->mtx);
+		pthread_mutex_destroy(&philo_main->can_write);
 		return (destroy_mutex(philo_main->forks, philo_main->arg.nb_philo), 0);
-	philo_main->start_time = get_time_ms();
+	}
+	philo_main->start_time = get_time_ms(philo_main);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:19:52 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/11 18:13:32 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/12 14:12:47 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	all_threads_ready(t_philo_main *philo_main)
 		pthread_mutex_lock(&philo_main->philos[i].mtx);
 		if (!philo_main->philos[i].is_ready)
 		{
-			printf("philo %d not ready\n", i);
 			pthread_mutex_unlock(&philo_main->philos[i].mtx);
 			return (0);
 		}
@@ -32,6 +31,26 @@ int	all_threads_ready(t_philo_main *philo_main)
 	return (1);
 }
 
+int	is_dead(t_philo *philo)
+{
+	long int	current_time;
+
+	pthread_mutex_lock(&philo->philo_main->mtx);
+	current_time = philo->philo_main->time;
+	pthread_mutex_unlock(&philo->philo_main->mtx);
+	pthread_mutex_lock(&philo->mtx);
+	//printf("%ld, %d lte : %d, (%ld)\n", current_time, philo->index, philo->last_time_eat, philo->philo_main->arg.time_to_die);
+	if (current_time - philo->last_time_eat >= philo->philo_main->arg.time_to_eat)
+	{
+		philo->is_dead = 1;
+		pthread_mutex_unlock(&philo->mtx);
+		// printf("%ldms, %d is dead\n", current_time, philo->index);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->mtx);
+	return (0);
+}
+
 int	philos_dead(t_philo_main *philo_main)
 {
 	int	i;
@@ -39,28 +58,20 @@ int	philos_dead(t_philo_main *philo_main)
 	i = 0;
 	while (i < philo_main->arg.nb_philo)
 	{
-		pthread_mutex_lock(&philo_main->philos[i].mtx);
-		if (philo_main->philos[i].is_dead)
-		{
-			pthread_mutex_unlock(&philo_main->philos[i].mtx);
+		if (is_dead(&philo_main->philos[i]))
 			return (1);
-		}
-		pthread_mutex_unlock(&philo_main->philos[i].mtx);
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
 void	update_time(t_philo_main *philo_main)
 {
-	size_t	time;
+	long int	current_time;
 
+	current_time = get_time_ms(philo_main);
 	pthread_mutex_lock(&philo_main->mtx);
-	time = philo_main->time;
-	pthread_mutex_unlock(&philo_main->mtx);
-	time = get_time_ms() - time;
-	pthread_mutex_lock(&philo_main->mtx);
-	philo_main->time += time;
+	philo_main->time = current_time;
 	pthread_mutex_unlock(&philo_main->mtx);
 }
 
@@ -90,25 +101,19 @@ void	*monitoring_routine(void *arg)
 	monitoring = (t_monitoring *)arg;
 	while (!all_threads_ready(monitoring->philo_main))
 		continue ;
-	// {
-	// 	if (monitoring->philo_main->time >= MAX_INIT_TIME)
-	// 	{
-	// 		pthread_mutex_lock(&monitoring->philo_main->mtx);
-	// 		monitoring->philo_main->error = 1;
-	// 		pthread_mutex_unlock(&monitoring->philo_main->mtx);
-	// 		return (NULL);
-	// 	}
-	// }
 	pthread_mutex_lock(&monitoring->philo_main->mtx);
 	monitoring->philo_main->is_running = 1;
 	pthread_mutex_unlock(&monitoring->philo_main->mtx);
 	while (1)
 	{
+		update_time(monitoring->philo_main);
 		if (philos_dead(monitoring->philo_main))
 		{
+			// printf("philos dead, stoping dinner\n");
 			pthread_mutex_lock(&monitoring->philo_main->mtx);
-			monitoring->is_running = 0;
+			monitoring->philo_main->is_running = 0;
 			pthread_mutex_unlock(&monitoring->philo_main->mtx);
+			break ;
 		}
 		else if (monitoring->philo_main->arg.max_eat != -1 \
 			&& eat_target(monitoring->philo_main))
@@ -116,8 +121,10 @@ void	*monitoring_routine(void *arg)
 			pthread_mutex_lock(&monitoring->philo_main->mtx);
 			monitoring->is_running = 0;
 			pthread_mutex_unlock(&monitoring->philo_main->mtx);
+			break ;
 		}
 	}
+	printf("monitoring finished\n");
 	return (NULL);
 }
 
