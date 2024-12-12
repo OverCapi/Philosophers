@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 15:31:14 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/12 15:33:42 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/12 17:47:40 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,6 @@ int	eat_target_reached(t_philo *philo)
 	return (philo->nb_eat >= philo->philo_main->arg.max_eat);
 }
 
-int	philo_dead(t_philo *philo)
-{
-	// printf("philo %d : philo_dead : %ld, (%ld)\n", philo->index,get_time_ms(philo->philo_main) - philo->last_time_eat, philo->philo_main->arg.time_to_die);
-	pthread_mutex_lock(&philo->mtx);
-	if (get_time_ms(philo->philo_main) - philo->last_time_eat >= philo->philo_main->arg.time_to_die)
-	{
-		philo->is_dead = 1;
-		pthread_mutex_unlock(&philo->mtx);
-		if (!print_status(philo, DIED_STATUS))
-			return (0);
-		return (1);
-	}
-	pthread_mutex_unlock(&philo->mtx);
-	return (0);
-}
-
 int	error(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->philo_main->mtx);
@@ -61,20 +45,24 @@ int	error(t_philo *philo)
 
 int	is_finished(t_philo *philo)
 {
-	int	ret;
+	int			ret;
+	static	int	once = 0;
 
 	// printf("philo %d check if sim is finished\n", philo->index);
 	pthread_mutex_lock(&philo->philo_main->mtx);
 	ret = philo->philo_main->is_running;
 	pthread_mutex_unlock(&philo->philo_main->mtx);
 	pthread_mutex_lock(&philo->mtx);
-	if (philo->is_dead)
+	if (philo->is_dead && !once)
 	{
 		pthread_mutex_unlock(&philo->mtx);
 		pthread_mutex_lock(&philo->philo_main->can_write);
+		pthread_mutex_lock(&philo->philo_main->mtx);
 		// printf("philo %d end check if sim is finished\n", philo->index);
-		printf("%zums %d %s", get_time_ms(philo->philo_main), philo->index, DIED_STATUS);
+		once = 1;
+		printf("%zums %d %s", philo->philo_main->time, philo->index, DIED_STATUS);
 		pthread_mutex_unlock(&philo->philo_main->can_write);
+		pthread_mutex_unlock(&philo->philo_main->mtx);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->mtx);
@@ -87,7 +75,9 @@ int	print_status(t_philo *philo, char *status)
 {
 	size_t	time;
 
+	pthread_mutex_lock(&philo->philo_main->mtx);
 	time = philo->philo_main->time;
+	pthread_mutex_unlock(&philo->philo_main->mtx);
 	if (is_finished(philo))
 		return (0);
 	pthread_mutex_lock(&philo->philo_main->can_write);
@@ -124,10 +114,10 @@ int	eat_routine(t_philo *philo)
 		pthread_mutex_unlock(&philo->right->mtx);
 		return (0);
 	}
+	usleep(philo->philo_main->arg.time_to_eat * 1000);
 	pthread_mutex_lock(&philo->mtx);
 	philo->last_time_eat = get_time_ms(philo->philo_main);
 	pthread_mutex_unlock(&philo->mtx);
-	usleep(philo->philo_main->arg.time_to_eat * 1000);
 	pthread_mutex_lock(&philo->mtx);
 	philo->nb_eat++;
 	pthread_mutex_unlock(&philo->mtx);

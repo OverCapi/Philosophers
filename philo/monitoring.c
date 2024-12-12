@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:19:52 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/12 15:33:52 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/12 17:47:56 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ int	is_dead(t_philo *philo)
 	current_time = philo->philo_main->time;
 	pthread_mutex_unlock(&philo->philo_main->mtx);
 	pthread_mutex_lock(&philo->mtx);
-	//printf("%ld, %d lte : %d, (%ld)\n", current_time, philo->index, philo->last_time_eat, philo->philo_main->arg.time_to_die);
-	if (current_time - philo->last_time_eat >= philo->philo_main->arg.time_to_eat)
+	if (current_time - philo->last_time_eat >= philo->philo_main->arg.time_to_die)
 	{
 		philo->is_dead = 1;
 		pthread_mutex_unlock(&philo->mtx);
+		// printf("%ld, %d lte : %d, (%ld)\n", current_time, philo->index, philo->last_time_eat, philo->philo_main->arg.time_to_die);
 		// printf("%ldms, %d is dead\n", current_time, philo->index);
 		return (1);
 	}

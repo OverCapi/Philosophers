@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 09:15:55 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/12 13:28:46 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/12 17:35:53 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_philo
 	int				is_dead;
 	int				nb_eat;
 	int				is_ready;
-	int				last_time_eat;
+	long int		last_time_eat;
 	t_fork			*right;
 	t_fork			*left;
 	t_philo_main	*philo_main;
