@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 15:31:14 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/12 14:22:08 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/12 14:29:23 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	is_finished(t_philo *philo)
 	}
 	pthread_mutex_unlock(&philo->mtx);
 	// printf("philo %d end check if sim is finished\n", philo->index);
-	printf("%d running status : %d, ret value : %d\n", philo->index, ret, !ret);
+	// printf("%d running status : %d, ret value : %d\n", philo->index, ret, !ret);
 	return (!ret);
 }
 
