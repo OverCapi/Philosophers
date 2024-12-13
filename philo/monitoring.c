@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:19:52 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/12 17:47:56 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/13 13:55:49 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,10 @@ int	is_dead(t_philo *philo)
 	current_time = philo->philo_main->time;
 	pthread_mutex_unlock(&philo->philo_main->mtx);
 	pthread_mutex_lock(&philo->mtx);
-	if (current_time - philo->last_time_eat >= philo->philo_main->arg.time_to_die)
+	if (current_time - philo->last_time_eat >= philo->philo_main->arg.time_to_die + 5) // +5 for safety
 	{
 		philo->is_dead = 1;
 		pthread_mutex_unlock(&philo->mtx);
-		// printf("%ld, %d lte : %d, (%ld)\n", current_time, philo->index, philo->last_time_eat, philo->philo_main->arg.time_to_die);
-		// printf("%ldms, %d is dead\n", current_time, philo->index);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->mtx);
@@ -109,7 +107,6 @@ void	*monitoring_routine(void *arg)
 		update_time(monitoring->philo_main);
 		if (philos_dead(monitoring->philo_main))
 		{
-			// printf("philos dead, stoping dinner\n");
 			pthread_mutex_lock(&monitoring->philo_main->mtx);
 			monitoring->philo_main->is_running = 0;
 			pthread_mutex_unlock(&monitoring->philo_main->mtx);

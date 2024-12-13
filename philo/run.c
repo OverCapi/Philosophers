@@ -6,24 +6,61 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 15:31:14 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/12 17:47:40 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/13 13:54:37 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-long int	get_time_ms(t_philo_main *philo_main)
+// 0 : ms, 1 : us
+long int	get_time(int unit)
 {
 	struct timeval	time;
-	size_t			current_time;
 
-	pthread_mutex_lock(&philo_main->mtx);
 	gettimeofday(&time, NULL);
-	current_time = time.tv_sec * 1000 + time.tv_usec / 1000;
+	if (unit == 0)
+		return (time.tv_sec * 1000 + time.tv_usec / 1000);
+	else if (unit == 1)
+		return (time.tv_sec * 1000000 + time.tv_usec);
+	else
+		return (0);
+}
+
+void	ft_usleep(long int time_us)
+{
+	long int		start_time;
+	long int		remaining;
+
+	if (time_us <= 0)
+		return ;
+	start_time = get_time(1);
+	remaining = time_us;
+	while (remaining >= 0)
+	{
+		remaining = time_us - (get_time(1) - start_time);
+		if (remaining <= 1000)
+		{
+			while (remaining >= 0)
+				remaining = time_us - (get_time(1) - start_time);
+		}
+		else
+			usleep(remaining / 2);
+	}
+}
+
+// get time elapsed since the start of the sim
+long int	get_time_ms(t_philo_main *philo_main)
+{
+	long int	current_time;
+
+	current_time = get_time(0);
+	pthread_mutex_lock(&philo_main->mtx);
 	if (philo_main->start_time == 0)
 		philo_main->start_time = current_time;
+	else
+		current_time -= philo_main->start_time;
 	pthread_mutex_unlock(&philo_main->mtx);
-	return (current_time - philo_main->start_time);
+	return (current_time);
 }
 
 int	eat_target_reached(t_philo *philo)
@@ -45,10 +82,9 @@ int	error(t_philo *philo)
 
 int	is_finished(t_philo *philo)
 {
+	static int	once = 0;
 	int			ret;
-	static	int	once = 0;
 
-	// printf("philo %d check if sim is finished\n", philo->index);
 	pthread_mutex_lock(&philo->philo_main->mtx);
 	ret = philo->philo_main->is_running;
 	pthread_mutex_unlock(&philo->philo_main->mtx);
@@ -58,16 +94,13 @@ int	is_finished(t_philo *philo)
 		pthread_mutex_unlock(&philo->mtx);
 		pthread_mutex_lock(&philo->philo_main->can_write);
 		pthread_mutex_lock(&philo->philo_main->mtx);
-		// printf("philo %d end check if sim is finished\n", philo->index);
 		once = 1;
-		printf("%zums %d %s", philo->philo_main->time, philo->index, DIED_STATUS);
+		printf("%zu %d %s", philo->philo_main->time, philo->index, DIED_STATUS);
 		pthread_mutex_unlock(&philo->philo_main->can_write);
 		pthread_mutex_unlock(&philo->philo_main->mtx);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->mtx);
-	// printf("philo %d end check if sim is finished\n", philo->index);
-	// printf("%d running status : %d, ret value : %d\n", philo->index, ret, !ret);
 	return (!ret);
 }
 
@@ -114,7 +147,7 @@ int	eat_routine(t_philo *philo)
 		pthread_mutex_unlock(&philo->right->mtx);
 		return (0);
 	}
-	usleep(philo->philo_main->arg.time_to_eat * 1000);
+	ft_usleep(philo->philo_main->arg.time_to_eat * 1000);
 	pthread_mutex_lock(&philo->mtx);
 	philo->last_time_eat = get_time_ms(philo->philo_main);
 	pthread_mutex_unlock(&philo->mtx);
@@ -130,7 +163,7 @@ int	sleep_routine(t_philo *philo)
 {
 	if (!print_status(philo, SLEEP_STATUS))
 		return (0);
-	usleep(philo->philo_main->arg.time_to_sleep * 1000);
+	ft_usleep(philo->philo_main->arg.time_to_sleep * 1000);
 	return (1);
 }
 

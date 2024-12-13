@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 09:15:55 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/12 17:35:53 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/13 13:54:13 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ typedef struct s_philo_main
 int	ft_atoi_safe(const char *nptr);
 int	print_error(char *msg, int ret_value);
 long int	get_time_ms(t_philo_main *philo_main);
+void	ft_usleep(long int time_us);
 
 /* INIT */
 int	init(t_philo_main *philo_main);
