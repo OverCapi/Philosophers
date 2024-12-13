@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 15:31:14 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/13 13:54:37 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/13 17:05:07 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,8 @@ int	eat_routine(t_philo *philo)
 		pthread_mutex_lock(&philo->left->mtx);
 	else
 		pthread_mutex_lock(&philo->right->mtx);
+	if (is_finished(philo))
+			return (0);
 	if (!print_status(philo, FORK_STATUS))
 	{
 		pthread_mutex_unlock(&philo->left->mtx);
@@ -135,6 +137,8 @@ int	eat_routine(t_philo *philo)
 		pthread_mutex_lock(&philo->right->mtx);
 	else
 		pthread_mutex_lock(&philo->left->mtx);
+	if (is_finished(philo))
+		return (0);
 	if (!print_status(philo, FORK_STATUS))
 	{
 		pthread_mutex_unlock(&philo->left->mtx);
