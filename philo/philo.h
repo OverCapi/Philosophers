@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 09:15:55 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/13 13:54:13 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/14 15:02:53 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ int	init(t_philo_main *philo_main);
 int	print_status(t_philo *philo, char *status);
 int	start_monitoring(t_philo_main *philo_main);
 int	run(t_philo_main *philo_main);
+int	philo_alone(t_philo_main *philo_main);
+int	is_finished(t_philo *philo);
 
 /* MUTEX */
 int	set_int_mutex(pthread_mutex_t *mtx, int *ptr, int value);

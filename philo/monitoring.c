@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:19:52 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/13 13:55:49 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/14 15:21:39 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void	*monitoring_routine(void *arg)
 			pthread_mutex_unlock(&monitoring->philo_main->mtx);
 			break ;
 		}
-		else if (monitoring->philo_main->arg.max_eat != -1 \
+		if (monitoring->philo_main->arg.max_eat != -1 \
 			&& eat_target(monitoring->philo_main))
 		{
 			pthread_mutex_lock(&monitoring->philo_main->mtx);

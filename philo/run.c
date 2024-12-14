@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 15:31:14 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/13 17:05:07 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/14 15:26:01 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,11 @@ int	is_finished(t_philo *philo)
 		pthread_mutex_unlock(&philo->philo_main->mtx);
 		return (1);
 	}
+	if (philo->nb_eat >= philo->philo_main->arg.max_eat && philo->philo_main->arg.max_eat != -1)
+	{
+		pthread_mutex_unlock(&philo->mtx);
+		return (1);
+	}
 	pthread_mutex_unlock(&philo->mtx);
 	return (!ret);
 }
@@ -125,8 +130,6 @@ int	eat_routine(t_philo *philo)
 		pthread_mutex_lock(&philo->left->mtx);
 	else
 		pthread_mutex_lock(&philo->right->mtx);
-	if (is_finished(philo))
-			return (0);
 	if (!print_status(philo, FORK_STATUS))
 	{
 		pthread_mutex_unlock(&philo->left->mtx);
@@ -137,8 +140,6 @@ int	eat_routine(t_philo *philo)
 		pthread_mutex_lock(&philo->right->mtx);
 	else
 		pthread_mutex_lock(&philo->left->mtx);
-	if (is_finished(philo))
-		return (0);
 	if (!print_status(philo, FORK_STATUS))
 	{
 		pthread_mutex_unlock(&philo->left->mtx);
@@ -154,8 +155,6 @@ int	eat_routine(t_philo *philo)
 	ft_usleep(philo->philo_main->arg.time_to_eat * 1000);
 	pthread_mutex_lock(&philo->mtx);
 	philo->last_time_eat = get_time_ms(philo->philo_main);
-	pthread_mutex_unlock(&philo->mtx);
-	pthread_mutex_lock(&philo->mtx);
 	philo->nb_eat++;
 	pthread_mutex_unlock(&philo->mtx);
 	pthread_mutex_unlock(&philo->right->mtx);
@@ -173,7 +172,8 @@ int	sleep_routine(t_philo *philo)
 
 int	think_routine(t_philo *philo)
 {
-	(void)philo;
+	print_status(philo, THINK_STATUS);
+	ft_usleep(30);
 	return (1);
 }
 
@@ -260,6 +260,8 @@ static int	join_threads(t_philo_main *philo_main)
 
 int	run(t_philo_main *philo_main)
 {
+	if (philo_main->arg.nb_philo == 1)
+		return (philo_alone(philo_main));
 	if (!create_threads(philo_main))
 		return (0);
 	start_monitoring(philo_main);
