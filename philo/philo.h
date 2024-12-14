@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 09:15:55 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/14 15:53:03 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/14 16:33:19 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ typedef struct s_philo_main
 	size_t			time;
 	int				is_running;
 	int				error;
+	int				odd_philo_can_eat;
 	pthread_mutex_t	can_write;
 	pthread_mutex_t	mtx;
 }	t_philo_main;

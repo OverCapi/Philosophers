@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:19:52 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/14 15:31:14 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/14 16:38:55 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,27 @@ int	eat_target(t_philo_main *philo_main)
 	return (1);
 }
 
+int	check_even_philos(t_philo_main *philo_main)
+{
+	long int	i;
+
+	i = 0;
+	while (i < philo_main->arg.nb_philo)
+	{
+		if (philo_main->philos[i].nb_eat < 1)
+			return (0);
+		i += 2;
+	}
+	pthread_mutex_lock(&philo_main->mtx);
+	philo_main->odd_philo_can_eat = 1;
+	pthread_mutex_unlock(&philo_main->mtx);
+	return (1);
+}
+
 void	*monitoring_routine(void *arg)
 {
 	t_monitoring	*monitoring;
+	int				alr_check;
 
 	monitoring = (t_monitoring *)arg;
 	while (!all_threads_ready(monitoring->philo_main))
@@ -102,8 +120,14 @@ void	*monitoring_routine(void *arg)
 	pthread_mutex_lock(&monitoring->philo_main->mtx);
 	monitoring->philo_main->is_running = 1;
 	pthread_mutex_unlock(&monitoring->philo_main->mtx);
+	alr_check = 0;
 	while (1)
 	{
+		if (alr_check == 0 && monitoring->philo_main->arg.nb_philo % 2 == 0)
+		{
+			if (check_even_philos(monitoring->philo_main))
+				alr_check = 1;
+		}
 		update_time(monitoring->philo_main);
 		if (philos_dead(monitoring->philo_main))
 		{

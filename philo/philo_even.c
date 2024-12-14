@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 15:34:37 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/14 16:03:52 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/14 16:40:36 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,19 @@ void	*even_routine(void *arg)
 		if (is_finished(philo))
 			return (NULL);
 		think_routine_even(philo);
+	}
+	else
+	{
+		while (!is_finished(philo))
+		{
+			pthread_mutex_lock(&philo->philo_main->mtx);
+			if (philo->philo_main->odd_philo_can_eat == 1)
+			{
+				pthread_mutex_unlock(&philo->philo_main->mtx);
+				break ;
+			}
+			pthread_mutex_unlock(&philo->philo_main->mtx);
+		}
 	}
 	while (!is_finished(philo))
 	{
