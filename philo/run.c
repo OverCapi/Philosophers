@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 15:31:14 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/14 15:26:01 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/14 15:54:22 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,7 @@ static int	create_threads(t_philo_main *philo_main)
 
 static int	join_threads(t_philo_main *philo_main)
 {
-	int	i;
+	long int	i;
 
 	i = 0;
 	while (i < philo_main->arg.nb_philo)
@@ -262,6 +262,8 @@ int	run(t_philo_main *philo_main)
 {
 	if (philo_main->arg.nb_philo == 1)
 		return (philo_alone(philo_main));
+	else if (philo_main->arg.nb_philo % 2 == 0)
+		return (philo_even(philo_main));
 	if (!create_threads(philo_main))
 		return (0);
 	start_monitoring(philo_main);

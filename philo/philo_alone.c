@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 14:57:40 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/14 15:06:12 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/14 15:59:19 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	philo_alone(t_philo_main *philo_main)
 		return (print_error(THREAD_ERROR, 0));
 	}
 	start_monitoring(philo_main);
-	if (pthread_join(philo_main->philos[0].th, NULL) != 0)
+	if (pthread_join(philo_main->monitoring.th, NULL) != 0)
 	{
 		pthread_mutex_lock(&philo_main->mtx);
 		philo_main->error = 1;

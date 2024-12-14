@@ -3,6 +3,7 @@ SRCS_FILE = $(MANDATORY_PATH)/philo.c \
 			$(MANDATORY_PATH)/run.c \
 			$(MANDATORY_PATH)/init.c \
 			$(MANDATORY_PATH)/philo_alone.c \
+			$(MANDATORY_PATH)/philo_even.c \
 			$(MANDATORY_PATH)/monitoring.c \
 			$(MANDATORY_PATH)/ft_atoi_safe.c \
 			$(MANDATORY_PATH)/print_error.c
