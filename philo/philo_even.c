@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 15:34:37 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/14 16:44:22 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/14 16:55:30 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ int	philo_even(t_philo_main *philo_main)
 		i++;
 	}
 	start_monitoring(philo_main);
+	i = 0;
 	while (i < philo_main->arg.nb_philo)
 	{
 		if (pthread_join(philo_main->philos[i].th, NULL) != 0)
