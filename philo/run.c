@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 15:31:14 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/14 15:54:22 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/14 16:44:37 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ int	sleep_routine(t_philo *philo)
 int	think_routine(t_philo *philo)
 {
 	print_status(philo, THINK_STATUS);
-	ft_usleep(30);
+	ft_usleep(100);
 	return (1);
 }
 
