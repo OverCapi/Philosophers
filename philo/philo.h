@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 09:15:55 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/14 16:33:19 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/15 00:56:13 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ typedef struct s_philo_main
 	t_arg			arg;
 	t_philo			*philos;
 	t_fork			*forks;
-	t_monitoring	monitoring;
 	size_t			start_time;
 	size_t			time;
 	int				is_running;

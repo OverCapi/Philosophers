@@ -1,0 +1,110 @@
+#ifndef PHILO_H
+# define PHILO_H
+
+# define ARG_ERROR "Usage : ./philo number_of_philosophers \
+time_to_die \
+time_to_eat \
+time_to_sleep \
+[number_of_times_each_philosopher_must_eat]"
+# define ARG_VALUE_ERROR "Parameters must be greater or equal than 0"
+# define ALLOC_ERROR "Memory allocation failed"
+# define INIT_ERROR "Initialization failed"
+# define THREAD_ERROR "Thread creation failed"
+# define JOIN_ERROR "Thread join failed"
+
+# define EAT_STATUS "is eating\n"
+# define SLEEP_STATUS "is sleeping\n"
+# define THINK_STATUS "is thinking\n"
+# define FORK_STATUS "has taken a fork\n"
+# define DIED_STATUS "died\n"
+
+# include <stdio.h>
+# include <pthread.h>
+# include <unistd.h>
+# include <sys/time.h>
+# include <string.h>
+# include <stdlib.h>
+
+typedef struct s_prog t_prog;
+
+typedef struct s_arg
+{
+	int	nb_philo;
+	int	time_to_die;
+	int	time_to_eat;
+	int	time_to_sleep;
+	int	max_eat;
+}	t_arg;
+
+typedef struct s_philo
+{
+	pthread_t		th_id;
+	int				index;
+	size_t			last_time_eat;
+	int				eat_count;
+	int				is_dead;
+	int				is_ready;
+	pthread_mutex_t	mtx;
+	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*left_fork;
+	t_prog			*prog;
+}	t_philo;
+
+typedef struct s_prog
+{
+	t_arg			arg;
+	t_philo			*philos;
+	int				is_running;
+	int				error;
+	int				odd_philo_can_eat;
+	size_t			start_time;
+	size_t			time;
+	pthread_t		monitoring_th;
+	pthread_mutex_t	*write_perm;
+	pthread_mutex_t *forks;
+	pthread_mutex_t	mtx;
+}	t_prog;
+
+/*
+
+AJOUTER DES MESSAGES ERREUR DANS INIT ETC ... ----------------------------------------------
+MODIF MESSAGE DERREUR POUR LA SORTIE DERREUR
+
+*/
+
+/* UTILS */
+void	set_int_mutex(pthread_mutex_t *mtx, int *ptr, int value);
+int		get_int_mutex(pthread_mutex_t *mtx, int *ptr);
+void	set_size_t_mutex(pthread_mutex_t *mtx, size_t *ptr, size_t value);
+size_t	get_size_t_mutex(pthread_mutex_t *mtx, size_t *ptr);
+
+/* routine utils*/
+int		is_finished(t_prog *prog);
+int		print_status(t_philo *philo, char *status, int dead_status);
+int		wait_start(t_philo *philo);
+
+/* time */
+void	ft_usleep(size_t time_us);
+size_t	get_time_from_start(t_prog *prog);
+
+/* INIT */
+int		init_mutex(t_prog *prog);
+int		init_philos(t_prog *prog);
+int		init(t_prog *prog);
+
+/* RUN */
+int		sleep_routine(t_philo *philo);
+int		think_routine(t_philo *philo);
+void	*alone_routine(void *arg);
+void	*even_routine(void *arg);
+void	*philos_routine(void *arg);
+void	*monitoring_routine(void *arg);
+int		prepare_running(t_prog *prog);
+
+/* CLEAN */
+void	destroy_mutex(pthread_mutex_t **forks, int size);
+void	clean_mutex(t_prog *prog);
+void	clean_philos(t_philo **philos, int size);
+void	clean(t_prog *prog);
+
+#endif
