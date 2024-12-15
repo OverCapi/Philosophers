@@ -1,5 +1,17 @@
 #include "../philo.h"
 
+int	wait_odd_can_eat(t_philo *philo)
+{
+	while (1)
+	{
+		if (!is_finished(philo))
+			return (0);
+		if (get_int_mutex(&philo->prog->mtx, &philo->prog->odd_philo_can_eat))
+			return (1);
+	}
+	return (0);
+}
+
 int	is_finished(t_philo *philo)
 {
 	int	is_running;

@@ -25,7 +25,7 @@ time_to_sleep \
 # include <string.h>
 # include <stdlib.h>
 
-typedef struct s_prog t_prog;
+typedef struct s_prog	t_prog;
 
 typedef struct s_arg
 {
@@ -61,7 +61,7 @@ typedef struct s_prog
 	size_t			time;
 	pthread_t		monitoring_th;
 	pthread_mutex_t	*write_perm;
-	pthread_mutex_t *forks;
+	pthread_mutex_t	*forks;
 	pthread_mutex_t	mtx;
 }	t_prog;
 
@@ -73,28 +73,31 @@ MODIF MESSAGE DERREUR POUR LA SORTIE DERREUR
 */
 
 /* UTILS */
+// mutex_getters_setters.c
 void	set_int_mutex(pthread_mutex_t *mtx, int *ptr, int value);
 int		get_int_mutex(pthread_mutex_t *mtx, int *ptr);
 void	set_size_t_mutex(pthread_mutex_t *mtx, size_t *ptr, size_t value);
 size_t	get_size_t_mutex(pthread_mutex_t *mtx, size_t *ptr);
 
-/* routine utils*/
+//routine_utils.c
 int		is_finished(t_prog *prog);
 int		print_status(t_philo *philo, char *status, int dead_status);
 int		wait_start(t_philo *philo);
+int		wait_odd_can_eat(t_philo *philo);
 
-/* time */
+// time.c
+// size_t	get_time_since_start(t_prog *prog);
 void	ft_usleep(size_t time_us);
-size_t	get_time_from_start(t_prog *prog);
+void	update_time(t_prog *prog);
 
 /* INIT */
-int		init_mutex(t_prog *prog);
-int		init_philos(t_prog *prog);
+// init.c
 int		init(t_prog *prog);
 
 /* RUN */
-int		sleep_routine(t_philo *philo);
-int		think_routine(t_philo *philo);
+// common_routime.c
+int		routine(t_philo *philo);
+// philos_routine.c
 void	*alone_routine(void *arg);
 void	*even_routine(void *arg);
 void	*philos_routine(void *arg);
@@ -102,6 +105,7 @@ void	*monitoring_routine(void *arg);
 int		prepare_running(t_prog *prog);
 
 /* CLEAN */
+// clean.c
 void	destroy_mutex(pthread_mutex_t **forks, int size);
 void	clean_mutex(t_prog *prog);
 void	clean_philos(t_philo **philos, int size);

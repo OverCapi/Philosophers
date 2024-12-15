@@ -2,6 +2,7 @@
 
 int	parse_arg(t_arg *arg, int argc, char **argv)
 {
+	// refaire pour eviter l'overflow (time.sleep * 1000)
 	if (argc != 5 && argc != 6)
 		return (print_error(ARG_ERROR, 0));
 	arg->nb_philo = ft_atoi_safe(argv[1]);

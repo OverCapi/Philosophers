@@ -42,7 +42,7 @@ void	ft_usleep(size_t time_us)
 	}
 }
 
-size_t	get_time_from_start(t_prog *prog)
+static size_t	get_time_since_start(t_prog *prog)
 {
 	size_t	current_time;
 
@@ -54,4 +54,12 @@ size_t	get_time_from_start(t_prog *prog)
 		current_time -= prog->start_time;
 	pthread_mutex_unlock(&prog->mtx);
 	return (current_time);
+}
+
+void	update_time(t_prog *prog)
+{
+	size_t	current_time;
+
+	current_time = get_time_since_start(prog);
+	set_size_t_mutex(&prog->mtx, &prog->time, current_time);
 }
