@@ -5,12 +5,12 @@
 time_to_die \
 time_to_eat \
 time_to_sleep \
-[number_of_times_each_philosopher_must_eat]"
-# define ARG_VALUE_ERROR "Parameters must be greater or equal than 0"
-# define ALLOC_ERROR "Memory allocation failed"
-# define INIT_ERROR "Initialization failed"
-# define THREAD_ERROR "Thread creation failed"
-# define JOIN_ERROR "Thread join failed"
+[number_of_times_each_philosopher_must_eat]\n"
+# define ARG_VALUE_ERROR "Parameters must be greater or equal than 0\n"
+# define ALLOC_ERROR "Memory allocation failed\n"
+# define INIT_ERROR "Initialization failed\n"
+# define THREAD_ERROR "Thread creation failed\n"
+# define JOIN_ERROR "Thread join failed\n"
 
 # define EAT_STATUS "is eating\n"
 # define SLEEP_STATUS "is sleeping\n"
@@ -54,6 +54,7 @@ typedef struct s_prog
 {
 	t_arg			arg;
 	t_philo			*philos;
+	pthread_mutex_t	*forks;
 	int				is_running;
 	int				error;
 	int				odd_philo_can_eat;
@@ -61,7 +62,6 @@ typedef struct s_prog
 	size_t			time;
 	pthread_t		monitoring_th;
 	pthread_mutex_t	write_perm;
-	pthread_mutex_t	*forks;
 	pthread_mutex_t	mtx;
 }	t_prog;
 

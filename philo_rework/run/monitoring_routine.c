@@ -78,6 +78,7 @@ void	*monitoring_routine(void *arg)
 
 	alr_check = 0;
 	prog = (t_prog *)arg;
+	printf("monitoring start\n");
 	if (!wait_all_threads_ready(prog))
 		return (NULL);
 	set_int_mutex(&prog->mtx, &prog->is_running, 1);
