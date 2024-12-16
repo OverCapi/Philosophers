@@ -1,6 +1,5 @@
 #include "../philo.h"
 
-
 int	is_finished(t_philo *philo)
 {
 	static int	alr_dead = 0;
@@ -13,7 +12,8 @@ int	is_finished(t_philo *philo)
 		alr_dead = 1;
 		pthread_mutex_lock(&philo->prog->write_perm);
 		printf("%zu %d %s", \
-			get_time_since_start(philo->prog), philo->index, DIED_STATUS);
+			get_size_t_mutex(&philo->prog->mtx, &philo->prog->time), \
+			philo->index, DIED_STATUS);
 		pthread_mutex_unlock(&philo->prog->write_perm);
 	}
 	if (philo->prog->arg.max_eat != -1)

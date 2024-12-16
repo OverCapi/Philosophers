@@ -36,7 +36,7 @@ static int	eat_routine(t_philo *philo)
 	ft_usleep(philo->prog->arg.time_to_eat * 1000);
 	pthread_mutex_lock(&philo->mtx);
 	philo->last_time_eat = get_time_since_start(philo->prog);
-	philo->eat_count++;
+	philo->eat_count += 1;
 	pthread_mutex_unlock(&philo->mtx);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);

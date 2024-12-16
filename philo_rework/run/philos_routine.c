@@ -34,8 +34,10 @@ void	*even_routine(void *arg)
 			return (NULL);
 	}
 	while (!is_finished(philo))
+	{
 		if (!routine(philo))
 			return (NULL);
+	}
 	return (NULL);
 }
 
@@ -45,7 +47,6 @@ void	*philos_routine(void *arg)
 
 	philo = (t_philo *)arg;
 	set_int_mutex(&philo->mtx, &philo->is_ready, 1);
-	printf("%d, is ready\n", philo->index);
 	if (!wait_start(philo))
 		return (NULL);
 	while (!is_finished(philo))

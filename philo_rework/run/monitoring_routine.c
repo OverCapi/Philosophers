@@ -82,6 +82,7 @@ void	*monitoring_routine(void *arg)
 	prog = (t_prog *)arg;
 	if (!wait_all_threads_ready(prog))
 		return (NULL);
+	update_time(prog);
 	set_int_mutex(&prog->mtx, &prog->is_running, 1);
 	while (1)
 	{
