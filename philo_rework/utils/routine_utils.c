@@ -1,16 +1,5 @@
 #include "../philo.h"
 
-int	wait_odd_can_eat(t_philo *philo)
-{
-	while (1)
-	{
-		if (!is_finished(philo))
-			return (0);
-		if (get_int_mutex(&philo->prog->mtx, &philo->prog->odd_philo_can_eat))
-			return (1);
-	}
-	return (0);
-}
 
 int	is_finished(t_philo *philo)
 {
@@ -29,6 +18,18 @@ int	is_finished(t_philo *philo)
 	return (!is_running);
 }
 
+int	wait_odd_can_eat(t_philo *philo)
+{
+	while (1)
+	{
+		if (!is_finished(philo))
+			return (0);
+		if (get_int_mutex(&philo->prog->mtx, &philo->prog->odd_philo_can_eat))
+			return (1);
+	}
+	return (0);
+}
+
 int	print_status(t_philo *philo, char *status, int dead_status)
 {
 	static int	alr_dead = 0;
@@ -37,7 +38,7 @@ int	print_status(t_philo *philo, char *status, int dead_status)
 	if (dead_status == 1 && alr_dead != 0)
 		return (0);
 	time = get_size_t_mutex(&philo->prog->mtx, &philo->prog->time);
-	if (is_finished(philo->prog))
+	if (is_finished(philo))
 		return (0);
 	pthread_mutex_lock(&philo->prog->write_perm);
 	printf("%zu %d %s", time, philo->index, status);

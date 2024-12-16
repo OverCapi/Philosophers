@@ -60,7 +60,7 @@ typedef struct s_prog
 	size_t			start_time;
 	size_t			time;
 	pthread_t		monitoring_th;
-	pthread_mutex_t	*write_perm;
+	pthread_mutex_t	write_perm;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	mtx;
 }	t_prog;
@@ -80,15 +80,25 @@ void	set_size_t_mutex(pthread_mutex_t *mtx, size_t *ptr, size_t value);
 size_t	get_size_t_mutex(pthread_mutex_t *mtx, size_t *ptr);
 
 //routine_utils.c
-int		is_finished(t_prog *prog);
+int		is_finished(t_philo *philo);
 int		print_status(t_philo *philo, char *status, int dead_status);
 int		wait_start(t_philo *philo);
 int		wait_odd_can_eat(t_philo *philo);
 
 // time.c
-// size_t	get_time_since_start(t_prog *prog);
+size_t	get_time_since_start(t_prog *prog);
 void	ft_usleep(size_t time_us);
 void	update_time(t_prog *prog);
+
+// print_error.c
+int		print_error(char *msg, int status);
+
+// ft_atoi_safe.c
+int		ft_atoi_safe(const char *nptr);
+
+/* PARSING */
+// parsing.c
+int		parse_arg(t_arg *arg, int argc, char **argv);
 
 /* INIT */
 // init.c
@@ -102,13 +112,14 @@ void	*alone_routine(void *arg);
 void	*even_routine(void *arg);
 void	*philos_routine(void *arg);
 void	*monitoring_routine(void *arg);
-int		prepare_running(t_prog *prog);
+// run.c
+int		run(t_prog *prog);
 
 /* CLEAN */
 // clean.c
-void	destroy_mutex(pthread_mutex_t **forks, int size);
+void	destroy_mutex(t_prog *prog, int size);
 void	clean_mutex(t_prog *prog);
-void	clean_philos(t_philo **philos, int size);
+void	clean_philos(t_prog *prog, int size);
 void	clean(t_prog *prog);
 
 #endif

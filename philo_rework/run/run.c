@@ -17,11 +17,11 @@ static int	threads_creation(t_prog *prog)
 	{
 		if (pthread_create(&prog->philos[i].th_id, NULL, \
 			routine_fct, &prog->philos[i]) != 0)
-			return (set_int_mutex(&prog->mtx, prog->error, 1), 0);
+			return (set_int_mutex(&prog->mtx, &prog->error, 1), 0);
 	}
 	if (pthread_create(&prog->monitoring_th, NULL, \
 		&monitoring_routine, prog) != 0)
-		return (set_int_mutex(&prog->mtx, prog->error, 1), 0);
+		return (set_int_mutex(&prog->mtx, &prog->error, 1), 0);
 	return (1);
 }
 
@@ -32,15 +32,15 @@ static int	join_threads(t_prog *prog)
 	i = -1;
 	while (++i < prog->arg.nb_philo)
 	{
-		if (pthread_join(&prog->philos[i].th_id, NULL) != 0)
-			return (set_int_mutex(&prog->mtx, prog->error, 1), 0);
+		if (pthread_join(prog->philos[i].th_id, NULL) != 0)
+			return (set_int_mutex(&prog->mtx, &prog->error, 1), 0);
 	}
-	if (pthread_join(&prog->monitoring_th, NULL) != 0)
-		return (set_int_mutex(&prog->mtx, prog->error, 1), 0);
+	if (pthread_join(prog->monitoring_th, NULL) != 0)
+		return (set_int_mutex(&prog->mtx, &prog->error, 1), 0);
 	return (1);
 }
 
-int	prepare_running(t_prog *prog)
+int	run(t_prog *prog)
 {
 	if (!threads_creation(prog))
 		return (0);

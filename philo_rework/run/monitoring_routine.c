@@ -44,7 +44,7 @@ static int	philos_dead(t_prog *prog)
 	{
 		last_time_eat = get_size_t_mutex(&prog->philos[i].mtx, \
 			&prog->philos[i].last_time_eat);
-		if (current_time - last_time_eat < prog->arg.time_to_die + 5)
+		if (current_time - last_time_eat < (size_t)(prog->arg.time_to_die + 5))
 		{
 			set_int_mutex(&prog->philos[i].mtx, &prog->philos[i].is_dead, 1);
 			set_int_mutex(&prog->mtx, &prog->is_running, 0);
@@ -62,7 +62,7 @@ static int	check_philos_full(t_prog *prog)
 	i = -1;
 	while (++i < prog->arg.nb_philo)
 	{
-		eat_count = get_size_t_mutex(&prog->philos[i].mtx, \
+		eat_count = get_int_mutex(&prog->philos[i].mtx, \
 			&prog->philos[i].eat_count);
 		if (eat_count < prog->arg.max_eat)
 			return (0);

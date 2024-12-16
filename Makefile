@@ -1,21 +1,29 @@
-MANDATORY_PATH = ./philo
-SRCS_FILE = $(MANDATORY_PATH)/philo.c \
-			$(MANDATORY_PATH)/run.c \
-			$(MANDATORY_PATH)/init.c \
-			$(MANDATORY_PATH)/philo_alone.c \
-			$(MANDATORY_PATH)/philo_even.c \
-			$(MANDATORY_PATH)/monitoring.c \
-			$(MANDATORY_PATH)/ft_atoi_safe.c \
-			$(MANDATORY_PATH)/print_error.c
+MANDATORY_PATH = ./philo_rework
+RUN_PATH = $(MANDATORY_PATH)/run
+UTILS_PATH = $(MANDATORY_PATH)/utils
 
-BONUS_PATH = ./philo_bonus
-SRCS_BONUS = $(BONUS_PATH)/philo_bonus.c
+SRCS_RUN_FILE =		$(RUN_PATH)/common_routine.c \
+					$(RUN_PATH)/monitoring_routine.c \
+					$(RUN_PATH)/philos_routine.c \
+					$(RUN_PATH)/run.c
 
-OBJECT_FILE = $(SRCS_FILE:.c=.o)
-OBJECT_FILE_BONUS = $(SRCS_BONUS:.c=.o)
+SRCS_UTILS_FILE = 	$(UTILS_PATH)/mutex_getters_setters.c \
+					$(UTILS_PATH)/routine_utils.c \
+					$(UTILS_PATH)/time.c \
+					$(UTILS_PATH)/ft_atoi_safe.c \
+					$(UTILS_PATH)/print_error.c
+
+SRCS_FILE_OTHERS =	$(MANDATORY_PATH)/clean.c \
+					$(MANDATORY_PATH)/init.c \
+					$(MANDATORY_PATH)/parsing.c \
+					$(MANDATORY_PATH)/philo.c
+
+SRCS_FILE =			$(SRCS_UTILS_FILE) \
+					$(SRCS_RUN_FILE) \
+					$(SRCS_FILE_OTHERS)
+OBJECT_FILE =		$(SRCS_FILE:.c=.o)
 
 NAME = philo
-NAME_BONUS = philo_bonus
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 LIB    = -lpthread
@@ -29,16 +37,12 @@ all: $(NAME)
 $(NAME): $(OBJECT_FILE)
 	$(CC) $(CFLAGS) $(LIB) $(DEBUG) -o $(MANDATORY_PATH)/$(NAME) $(OBJECT_FILE)
 
-bonus: $(OBJECT_FILE_BONUS)
-	$(CC) $(CFLAGS) $(LIB) $(DEBUG) -o $(BONUS_PATH)/$(NAME_BONUS) $(OBJECT_FILE_BONUS)
-
 clean:
-	rm -f $(OBJECT_FILE) $(OBJECT_FILE_BONUS)
+	rm -f $(OBJECT_FILE)
 
 fclean: clean
 	rm -f $(MANDATORY_PATH)/$(NAME)
-	rm -f $(BONUS_PATH)/$(NAME_BONUS)
 
 re: fclean $(NAME)
 
-.PHONY: all bonus clean fclean re
+.PHONY: all clean fclean re

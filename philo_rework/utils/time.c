@@ -42,7 +42,7 @@ void	ft_usleep(size_t time_us)
 	}
 }
 
-static size_t	get_time_since_start(t_prog *prog)
+size_t	get_time_since_start(t_prog *prog)
 {
 	size_t	current_time;
 

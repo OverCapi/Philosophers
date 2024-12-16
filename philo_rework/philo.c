@@ -9,8 +9,7 @@ int	main(int argc, char **argv)
 		return (1);
 	if (!init(&prog))
 		return (1);
-	if (!run(&prog))
-		return (1);
+	run(&prog);
 	clean(&prog);
 	return (0);
 }

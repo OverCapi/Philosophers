@@ -1,19 +1,24 @@
-#include "../philo.h"
+#include "philo.h"
 
 static int	init_forks(t_prog *prog)
 {
 	int	i;
 
 	i = -1;
+	prog->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * \
+		prog->arg.nb_philo);
+	if (!prog->forks)
+		return (0);
 	while (++i < prog->arg.nb_philo)
 	{
 		if (pthread_mutex_init(&prog->forks[i], NULL) != 0)
 		{
 			pthread_mutex_destroy(&prog->mtx);
 			pthread_mutex_destroy(&prog->write_perm);
-			return (destroy_mutex(&prog->forks, i), 0);
+			return (destroy_mutex(prog, i), 0);
 		}
 	}
+	return (1);
 }
 
 static int	init_mutex(t_prog *prog)
@@ -28,6 +33,7 @@ static int	init_mutex(t_prog *prog)
 		pthread_mutex_destroy(&prog->write_perm);
 		return (0);
 	}
+	return (1);
 }
 
 static int	init_philo(t_prog *prog, int index)
@@ -56,7 +62,7 @@ static int	init_philos(t_prog *prog)
 	{
 		memset(&prog->philos[i], 0, sizeof(t_philo));
 		if (!init_philo(prog, i))
-			return (clean_philos(&prog->philos, i), 0);
+			return (clean_philos(prog, i), 0);
 	}
 	return (1);
 }
@@ -70,4 +76,5 @@ int	init(t_prog *prog)
 		clean_mutex(prog);
 		return (print_error(INIT_ERROR, 0));
 	}
+	return (1);
 }
