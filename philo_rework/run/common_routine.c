@@ -16,7 +16,7 @@ static int	get_fork(t_philo *philo, int fork_nb)
 		else
 			pthread_mutex_lock(philo->left_fork);
 	}
-	if (!print_status(philo, FORK_STATUS, 0))
+	if (!print_status(philo, FORK_STATUS))
 	{
 		pthread_mutex_unlock(philo->left_fork); // mb issue
 		pthread_mutex_unlock(philo->right_fork);
@@ -31,7 +31,7 @@ static int	eat_routine(t_philo *philo)
 		return (0);
 	if (!get_fork(philo, 1))
 		return (0);
-	if (!print_status(philo, EAT_STATUS, 0))
+	if (!print_status(philo, EAT_STATUS))
 		return (0);
 	ft_usleep(philo->prog->arg.time_to_eat * 1000);
 	pthread_mutex_lock(&philo->mtx);
@@ -45,7 +45,7 @@ static int	eat_routine(t_philo *philo)
 
 static int	sleep_routine(t_philo *philo)
 {
-	if (!print_status(philo, SLEEP_STATUS, 0))
+	if (!print_status(philo, SLEEP_STATUS))
 		return (0);
 	ft_usleep(philo->prog->arg.time_to_sleep * 1000);
 	return (1);
@@ -53,7 +53,7 @@ static int	sleep_routine(t_philo *philo)
 
 static int	think_routine(t_philo *philo)
 {
-	if (!print_status(philo, THINK_STATUS, 0))
+	if (!print_status(philo, THINK_STATUS))
 		return (0);
 	ft_usleep(100); // fix mb
 	return (1);

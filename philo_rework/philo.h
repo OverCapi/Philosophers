@@ -81,7 +81,7 @@ size_t	get_size_t_mutex(pthread_mutex_t *mtx, size_t *ptr);
 
 //routine_utils.c
 int		is_finished(t_philo *philo);
-int		print_status(t_philo *philo, char *status, int dead_status);
+int		print_status(t_philo *philo, char *status);
 int		wait_start(t_philo *philo);
 int		wait_odd_can_eat(t_philo *philo);
 

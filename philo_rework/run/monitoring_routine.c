@@ -14,6 +14,8 @@ static int	wait_all_threads_ready(t_prog *prog)
 			if (!get_int_mutex(&prog->philos[i].mtx, &prog->philos[i].is_ready))
 				break ;
 		}
+		if (i == prog->arg.nb_philo)
+			return (1);
 	}
 	return (1);
 }
@@ -39,12 +41,12 @@ static int	philos_dead(t_prog *prog)
 	size_t	current_time;
 
 	i = -1;
-	current_time = get_size_t_mutex(&prog->mtx, &prog->time);
-	while (++i < prog->arg.max_eat)
+	current_time = get_time_since_start(prog);
+	while (++i < prog->arg.nb_philo)
 	{
 		last_time_eat = get_size_t_mutex(&prog->philos[i].mtx, \
 			&prog->philos[i].last_time_eat);
-		if (current_time - last_time_eat < (size_t)(prog->arg.time_to_die + 5))
+		if (current_time - last_time_eat >= (size_t)(prog->arg.time_to_die + 5))
 		{
 			set_int_mutex(&prog->philos[i].mtx, &prog->philos[i].is_dead, 1);
 			set_int_mutex(&prog->mtx, &prog->is_running, 0);
@@ -78,7 +80,6 @@ void	*monitoring_routine(void *arg)
 
 	alr_check = 0;
 	prog = (t_prog *)arg;
-	printf("monitoring start\n");
 	if (!wait_all_threads_ready(prog))
 		return (NULL);
 	set_int_mutex(&prog->mtx, &prog->is_running, 1);

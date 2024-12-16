@@ -13,7 +13,7 @@ static int	threads_creation(t_prog *prog)
 		routine_fct = &even_routine;
 	else
 		routine_fct = &philos_routine;
-	while (++i)
+	while (++i < prog->arg.nb_philo)
 	{
 		if (pthread_create(&prog->philos[i].th_id, NULL, \
 			routine_fct, &prog->philos[i]) != 0)
@@ -28,16 +28,12 @@ static int	threads_creation(t_prog *prog)
 static int	join_threads(t_prog *prog)
 {
 	int	i;
-	int error;
 
 	i = -1;
 	while (++i < prog->arg.nb_philo)
 	{
-		error = pthread_join(prog->philos[i].th_id, NULL);
-		if (error != 0)
-		{
+		if (pthread_join(prog->philos[i].th_id, NULL) != 0)
 			return (set_int_mutex(&prog->mtx, &prog->error, 1), 0);
-		}
 	}
 	if (pthread_join(prog->monitoring_th, NULL) != 0)
 		return (set_int_mutex(&prog->mtx, &prog->error, 1), 0);
@@ -48,11 +44,6 @@ int	run(t_prog *prog)
 {
 	if (!threads_creation(prog))
 		return (print_error(THREAD_ERROR, 0));
-	for (int i = 0; i < prog->arg.nb_philo; i++)
-	{
-		printf("[%d] th_id : %lu\n", i, prog->philos[i].th_id);
-	}
-	
 	if (!join_threads(prog))
 		return (print_error(JOIN_ERROR, 0));
 	return (1);

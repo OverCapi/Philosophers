@@ -8,7 +8,7 @@ void	*alone_routine(void *arg)
 	set_int_mutex(&philo->mtx, &philo->is_ready, 1);
 	if (!wait_start(philo))
 		return (NULL);
-	if (!print_status(philo, FORK_STATUS, 0))
+	if (!print_status(philo, FORK_STATUS))
 		return (NULL);
 	while (!is_finished(philo))
 		continue ;
@@ -49,7 +49,9 @@ void	*philos_routine(void *arg)
 	if (!wait_start(philo))
 		return (NULL);
 	while (!is_finished(philo))
+	{
 		if (!routine(philo))
 			return (NULL);
+	}
 	return (NULL);
 }
