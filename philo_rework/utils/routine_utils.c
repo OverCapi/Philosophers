@@ -10,6 +10,7 @@ int	is_finished(t_philo *philo)
 	if (get_int_mutex(&philo->mtx, &philo->is_dead) == 1 && alr_dead != 1)
 	{
 		alr_dead = 1;
+		printf("%d is dead\n", philo->index);
 		pthread_mutex_lock(&philo->prog->write_perm);
 		printf("%zu %d %s", \
 			get_size_t_mutex(&philo->prog->mtx, &philo->prog->time), \
@@ -29,6 +30,7 @@ int	wait_odd_can_eat(t_philo *philo)
 {
 	while (1)
 	{
+		printf("wait odd can eat\n");
 		if (!is_finished(philo))
 			return (0);
 		if (get_int_mutex(&philo->prog->mtx, &philo->prog->odd_philo_can_eat))

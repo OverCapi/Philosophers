@@ -20,7 +20,7 @@ static int	wait_all_threads_ready(t_prog *prog)
 	return (1);
 }
 
-static int	check_odd_can_eat(t_prog *prog)
+static int	check_who_can_eat(t_prog *prog)
 {
 	int	i;
 
@@ -48,6 +48,7 @@ static int	philos_dead(t_prog *prog)
 			&prog->philos[i].last_time_eat);
 		if (current_time - last_time_eat >= (size_t)(prog->arg.time_to_die + 5))
 		{
+			printf("philo_dead, %d is dead\n", prog->philos[i].index);
 			set_int_mutex(&prog->philos[i].mtx, &prog->philos[i].is_dead, 1);
 			set_int_mutex(&prog->mtx, &prog->is_running, 0);
 			return (1);
@@ -86,10 +87,10 @@ void	*monitoring_routine(void *arg)
 	set_int_mutex(&prog->mtx, &prog->is_running, 1);
 	while (1)
 	{
-		if (!alr_check && check_odd_can_eat(prog))
+		if (!alr_check && check_who_can_eat(prog))
 		{
-			set_int_mutex(&prog->mtx, &prog->odd_philo_can_eat, 1);
 			alr_check = 1;
+			set_int_mutex(&prog->mtx, &prog->odd_philo_can_eat, 1);
 		}
 		update_time(prog);
 		if (philos_dead(prog))
