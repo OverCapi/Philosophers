@@ -23,18 +23,10 @@ void	*even_routine(void *arg)
 	set_int_mutex(&philo->mtx, &philo->is_ready, 1);
 	if (!wait_start(philo))
 		return (NULL);
-	if (!is_finished(philo) && philo->index % 2 == 0)
-	{
-		if (!routine(philo))
-			return (NULL);
-	}
-	else
-	{
-		if (!wait_odd_can_eat(philo))
-			return (NULL);
-	}
 	while (!is_finished(philo))
 	{
+		if (!wait_can_eat(philo))
+			return (NULL);
 		if (!routine(philo))
 			return (NULL);
 	}

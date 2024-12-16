@@ -42,6 +42,7 @@ static int	join_threads(t_prog *prog)
 
 int	run(t_prog *prog)
 {
+	update_time(prog);
 	if (!threads_creation(prog))
 		return (print_error(THREAD_ERROR, 0));
 	if (!join_threads(prog))

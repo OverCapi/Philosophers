@@ -57,7 +57,7 @@ typedef struct s_prog
 	pthread_mutex_t	*forks;
 	int				is_running;
 	int				error;
-	int				odd_philo_can_eat;
+	int				who_can_eat;
 	size_t			start_time;
 	size_t			time;
 	pthread_t		monitoring_th;
@@ -83,7 +83,7 @@ size_t	get_size_t_mutex(pthread_mutex_t *mtx, size_t *ptr);
 int		is_finished(t_philo *philo);
 int		print_status(t_philo *philo, char *status);
 int		wait_start(t_philo *philo);
-int		wait_odd_can_eat(t_philo *philo);
+int		wait_can_eat(t_philo *philo);
 
 // time.c
 size_t	get_time_since_start(t_prog *prog);
