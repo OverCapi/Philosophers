@@ -1,4 +1,4 @@
-MANDATORY_PATH = ./philo_rework
+MANDATORY_PATH = ./philo
 RUN_PATH = $(MANDATORY_PATH)/run
 UTILS_PATH = $(MANDATORY_PATH)/utils
 

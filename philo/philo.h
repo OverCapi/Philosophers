@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 09:15:55 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/15 00:56:13 by llemmel          ###   ########.fr       */
+/*   Created: 2024/12/17 14:10:41 by llemmel           #+#    #+#             */
+/*   Updated: 2024/12/17 14:32:20 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,14 @@
 time_to_die \
 time_to_eat \
 time_to_sleep \
-[number_of_times_each_philosopher_must_eat]"
-# define ARG_VALUE_ERROR "Parameters must be greater or equal than 0"
-# define ALLOC_ERROR "Memory allocation failed"
-# define INIT_ERROR "Initialization failed"
-# define THREAD_ERROR "Thread creation failed"
-# define JOIN_ERROR "Thread join failed"
+[number_of_times_each_philosopher_must_eat]\n"
+# define WRONG_PARAM_ERROR "Wrong parameters passed as arguments\n"
+# define OVERFLOW_ERROR "Parameters overflow, valid parameter : \
+0 < param < 2147483\n"
+# define ALLOC_ERROR "Memory allocation failed\n"
+# define INIT_ERROR "Initialization failed\n"
+# define THREAD_ERROR "Thread creation failed\n"
+# define JOIN_ERROR "Thread join failed\n"
 
 # define EAT_STATUS "is eating\n"
 # define SLEEP_STATUS "is sleeping\n"
@@ -37,76 +39,94 @@ time_to_sleep \
 # include <string.h>
 # include <stdlib.h>
 
+typedef struct s_prog	t_prog;
+
 typedef struct s_arg
 {
-	long int	nb_philo;
-	long int	time_to_die;
-	long int	time_to_eat;
-	long int	time_to_sleep;
-	long int	max_eat;
+	int	nb_philo;
+	int	time_to_die;
+	int	time_to_eat;
+	int	time_to_sleep;
+	int	max_eat;
 }	t_arg;
 
-typedef struct s_fork
-{
-	pthread_mutex_t	mtx;
-}	t_fork;
-
-typedef struct s_philo_main	t_philo_main;
 typedef struct s_philo
 {
-	pthread_t		th;
+	pthread_t		th_id;
 	int				index;
-	pthread_mutex_t	mtx;
+	size_t			last_time_eat;
+	int				eat_count;
 	int				is_dead;
-	int				nb_eat;
 	int				is_ready;
-	long int		last_time_eat;
-	t_fork			*right;
-	t_fork			*left;
-	t_philo_main	*philo_main;
+	pthread_mutex_t	mtx;
+	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*left_fork;
+	t_prog			*prog;
 }	t_philo;
 
-typedef struct s_monitoring
-{
-	pthread_t		th;
-	int				is_running;
-	int				is_dead;
-	int				nb_philo_reached_max_eat;
-	t_philo_main	*philo_main;
-}	t_monitoring;
-
-typedef struct s_philo_main
+typedef struct s_prog
 {
 	t_arg			arg;
 	t_philo			*philos;
-	t_fork			*forks;
-	size_t			start_time;
-	size_t			time;
+	pthread_mutex_t	*forks;
 	int				is_running;
 	int				error;
-	int				odd_philo_can_eat;
-	pthread_mutex_t	can_write;
+	int				who_can_eat;
+	size_t			start_time;
+	size_t			time;
+	pthread_t		monitoring_th;
+	pthread_mutex_t	write_perm;
 	pthread_mutex_t	mtx;
-}	t_philo_main;
+}	t_prog;
 
 /* UTILS */
-int	ft_atoi_safe(const char *nptr);
-int	print_error(char *msg, int ret_value);
-long int	get_time_ms(t_philo_main *philo_main);
-void	ft_usleep(long int time_us);
+// mutex_getters_setters.c
+void	set_int_mutex(pthread_mutex_t *mtx, int *ptr, int value);
+int		get_int_mutex(pthread_mutex_t *mtx, int *ptr);
+void	set_size_t_mutex(pthread_mutex_t *mtx, size_t *ptr, size_t value);
+size_t	get_size_t_mutex(pthread_mutex_t *mtx, size_t *ptr);
+
+//routine_utils.c
+int		is_finished(t_philo *philo);
+int		print_status(t_philo *philo, char *status);
+int		wait_start(t_philo *philo);
+int		wait_can_eat(t_philo *philo);
+
+// time.c
+size_t	get_time_since_start(t_prog *prog);
+void	ft_usleep(size_t time_us);
+void	update_time(t_prog *prog);
+
+// print_error.c
+int		print_error(char *msg, int status);
+
+// ft_atoi_safe.c
+int		ft_atoi_safe(const char *nptr);
+
+/* PARSING */
+// parsing.c
+int		parse_arg(t_arg *arg, int argc, char **argv);
 
 /* INIT */
-int	init(t_philo_main *philo_main);
+// init.c
+int		init(t_prog *prog);
 
-int	print_status(t_philo *philo, char *status);
-int	start_monitoring(t_philo_main *philo_main);
-int	run(t_philo_main *philo_main);
-int	philo_alone(t_philo_main *philo_main);
-int	is_finished(t_philo *philo);
-int	philo_even(t_philo_main *philo_main);
+/* RUN */
+// common_routime.c
+int		routine(t_philo *philo);
+// philos_routine.c
+void	*alone_routine(void *arg);
+void	*even_routine(void *arg);
+void	*philos_routine(void *arg);
+void	*monitoring_routine(void *arg);
+// run.c
+int		run(t_prog *prog);
 
-/* MUTEX */
-int	set_int_mutex(pthread_mutex_t *mtx, int *ptr, int value);
-int	get_int_mutex(pthread_mutex_t *mtx, int *ptr, int *err);
+/* CLEAN */
+// clean.c
+void	destroy_mutex(t_prog *prog, int size);
+void	clean_mutex(t_prog *prog);
+void	clean_philos(t_prog *prog, int size);
+void	clean(t_prog *prog);
 
 #endif
