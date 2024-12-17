@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   common_routine.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/17 15:00:54 by llemmel           #+#    #+#             */
+/*   Updated: 2024/12/17 15:02:04 by llemmel          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../philo.h"
 
 static int	get_fork(t_philo *philo, int fork_nb)
@@ -18,7 +30,7 @@ static int	get_fork(t_philo *philo, int fork_nb)
 	}
 	if (!print_status(philo, FORK_STATUS))
 	{
-		pthread_mutex_unlock(philo->left_fork); // mb issue
+		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
 		return (0);
 	}
@@ -55,7 +67,7 @@ static int	think_routine(t_philo *philo)
 {
 	if (!print_status(philo, THINK_STATUS))
 		return (0);
-	ft_usleep(100); // fix mb
+	ft_usleep(100);
 	return (1);
 }
 
