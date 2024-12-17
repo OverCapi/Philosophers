@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 14:29:21 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/16 14:29:35 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/17 14:24:08 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	ft_atoi_safe(const char *nptr)
 	while (ft_isdigit(nptr[i]) == 1)
 	{
 		if (check_overflow((long long int)nb * 10 + nptr[i] - '0', sign) == -1)
-			return (0);
+			return (-1);
 		nb = nb * 10 + nptr[i] - '0';
 		i++;
 	}

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/17 14:10:41 by llemmel           #+#    #+#             */
+/*   Updated: 2024/12/17 14:32:20 by llemmel          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -6,7 +18,9 @@ time_to_die \
 time_to_eat \
 time_to_sleep \
 [number_of_times_each_philosopher_must_eat]\n"
-# define ARG_VALUE_ERROR "Parameters must be greater or equal than 0\n"
+# define WRONG_PARAM_ERROR "Wrong parameters passed as arguments\n"
+# define OVERFLOW_ERROR "Parameters overflow, valid parameter : \
+0 < param < 2147483\n"
 # define ALLOC_ERROR "Memory allocation failed\n"
 # define INIT_ERROR "Initialization failed\n"
 # define THREAD_ERROR "Thread creation failed\n"
@@ -64,13 +78,6 @@ typedef struct s_prog
 	pthread_mutex_t	write_perm;
 	pthread_mutex_t	mtx;
 }	t_prog;
-
-/*
-
-AJOUTER DES MESSAGES ERREUR DANS INIT ETC ... ----------------------------------------------
-MODIF MESSAGE DERREUR POUR LA SORTIE DERREUR
-
-*/
 
 /* UTILS */
 // mutex_getters_setters.c
