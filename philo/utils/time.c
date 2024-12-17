@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 14:11:08 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/17 14:11:08 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/17 16:22:04 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,28 +28,20 @@ static size_t	get_time(int unit)
 void	ft_usleep(size_t time_us)
 {
 	size_t	start_time;
-	size_t	remaining;
-	size_t	tmp;
+	size_t	elapsed_time;
+	size_t	sleep_time;
 
 	start_time = get_time(1);
-	remaining = time_us;
-	while (remaining > 0)
+	elapsed_time = 0;
+	sleep_time = time_us / 2;
+	while (elapsed_time < time_us)
 	{
-		remaining = get_time(1) - start_time;
-		if (time_us - remaining <= 1000)
-		{
-			while (remaining != 0)
-			{
-				tmp = get_time(1) - start_time;
-				if (tmp >= time_us)
-					remaining = 0;
-				else
-					remaining = time_us - tmp;
-				usleep(100);
-			}
-		}
+		usleep(sleep_time);
+		elapsed_time = get_time(1) - start_time;
+		if (time_us - elapsed_time > 1000)
+			sleep_time = (time_us - elapsed_time) / 2;
 		else
-			usleep((time_us - remaining) / 2);
+			sleep_time = 1000;
 	}
 }
 
