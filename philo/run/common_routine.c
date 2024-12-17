@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:00:54 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/17 16:36:22 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/17 17:08:21 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	eat_routine(t_philo *philo)
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_lock(&philo->mtx);
-	philo->last_time_eat = get_time_since_start(philo->prog);
+	philo->last_time_eat = get_size_t_mutex(&philo->prog->mtx, &philo->prog->time);
 	philo->eat_count += 1;
 	pthread_mutex_unlock(&philo->mtx);
 	return (1);
@@ -67,7 +67,8 @@ static int	think_routine(t_philo *philo)
 {
 	if (!print_status(philo, THINK_STATUS))
 		return (0);
-	ft_usleep(100);
+	// if (philo->prog->arg.nb_philo % 2 == 1)
+	// 	ft_usleep(10000);
 	return (1);
 }
 
@@ -79,8 +80,6 @@ int	routine(t_philo *philo)
 	sleep_routine(philo);
 	if (is_finished(philo))
 		return (0);
-	if (philo->prog->arg.nb_philo % 2 == 0)
-		return (1);
 	think_routine(philo);
 	return (1);
 }
