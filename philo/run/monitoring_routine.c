@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:02:19 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/17 17:55:10 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/17 18:35:54 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ static int	philos_dead(t_prog *prog)
 		current_time = get_size_t_mutex(&prog->mtx, &prog->time);
 		if (current_time - last_time_eat >= time_to_die)
 		{
-			printf("DEBUG { %zu } { %zu } { %zu } (%zu)%d died\n", current_time, last_time_eat, current_time - last_time_eat, (size_t)(prog->arg.time_to_die), i);
 			set_int_mutex(&prog->philos[i].mtx, &prog->philos[i].is_dead, 1);
 			set_int_mutex(&prog->mtx, &prog->is_running, 0);
 			return (1);

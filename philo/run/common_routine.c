@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:00:54 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/17 17:56:39 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/17 18:07:07 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ static int	eat_routine(t_philo *philo)
 		return (0);
 	ft_usleep(philo->prog->arg.time_to_eat * 1000);
 	pthread_mutex_lock(&philo->mtx);
-	philo->last_time_eat = get_size_t_mutex(&philo->prog->mtx, &philo->prog->time);
+	philo->last_time_eat = get_size_t_mutex(&philo->prog->mtx, \
+		&philo->prog->time);
 	pthread_mutex_unlock(&philo->mtx);
 	pthread_mutex_lock(&philo->mtx);
 	philo->eat_count += 1;
