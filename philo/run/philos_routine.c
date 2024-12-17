@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 14:52:59 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/17 15:55:50 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/17 16:30:15 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ void	*even_routine(void *arg)
 	set_int_mutex(&philo->mtx, &philo->is_ready, 1);
 	if (!wait_start(philo))
 		return (NULL);
+	if (!wait_can_eat(philo))
+			return (NULL);
 	while (!is_finished(philo))
 	{
-		if (!wait_can_eat(philo))
-			return (NULL);
 		if (!routine(philo))
 			return (NULL);
 	}

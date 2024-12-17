@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:00:54 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/17 15:02:04 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/17 16:31:37 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ static int	eat_routine(t_philo *philo)
 	if (!print_status(philo, EAT_STATUS))
 		return (0);
 	ft_usleep(philo->prog->arg.time_to_eat * 1000);
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_lock(&philo->mtx);
 	philo->last_time_eat = get_time_since_start(philo->prog);
 	philo->eat_count += 1;
 	pthread_mutex_unlock(&philo->mtx);
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
 	return (1);
 }
 
