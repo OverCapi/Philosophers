@@ -31,7 +31,7 @@ static void	check_who_can_eat(t_prog *prog)
 	while (i < prog->arg.nb_philo)
 	{
 		if (get_int_mutex(&prog->philos[i].mtx, &prog->philos[i].eat_count) \
-			<= nb_call)
+			< nb_call)
 			return ;
 		i += 2;
 	}

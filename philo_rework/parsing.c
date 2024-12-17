@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 14:10:54 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/17 14:33:04 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/17 14:43:04 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	extract_number(int *arg_ptr, char *arg)
 	if (!check_string(arg))
 		return (print_error(WRONG_PARAM_ERROR, 0));
 	*arg_ptr = ft_atoi_safe(arg);
-	if (*arg_ptr == -1 || *arg_ptr >= 2147483)
+	if (*arg_ptr <= 0 || *arg_ptr >= 2147483)
 		return (print_error(OVERFLOW_ERROR, 0));
 	return (1);
 }
@@ -54,8 +54,11 @@ int	parse_arg(t_arg *arg, int argc, char **argv)
 		return (0);
 	if (!extract_number(&arg->time_to_sleep, argv[4]))
 		return (0);
-	if (argc == 6 && !extract_number(&arg->max_eat, argv[5]))
-		return (0);
+	if (argc == 6)
+	{
+		if (!extract_number(&arg->max_eat, argv[5]))
+			return (0);
+	}
 	else
 		arg->max_eat = -1;
 	return (1);
