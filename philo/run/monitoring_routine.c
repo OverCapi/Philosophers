@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:02:19 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/17 17:12:19 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/17 17:55:10 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	philos_dead(t_prog *prog)
 	size_t	time_to_die;
 
 	i = -1;
-	time_to_die = (size_t)(prog->arg.time_to_die + 10);
+	time_to_die = (size_t)(prog->arg.time_to_die + 5);
 	while (++i < prog->arg.nb_philo)
 	{
 		last_time_eat = get_size_t_mutex(&prog->philos[i].mtx, \
