@@ -27,7 +27,7 @@ NAME = philo
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 LIB    = -lpthread
-DEBUG  = -g3 #-fsanitize=address
+DEBUG  = #-g3 -fsanitize=address
 
 all: $(NAME)
 
