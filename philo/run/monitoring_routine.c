@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:02:19 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/17 18:35:54 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/18 16:08:17 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,10 @@ void	*monitoring_routine(void *arg)
 	t_prog	*prog;
 
 	prog = (t_prog *)arg;
+	printf("Monitoring routine started\n");
 	if (!wait_all_threads_ready(prog))
 		return (NULL);
+	printf("All threads are ready\n");
 	update_time(prog);
 	set_int_mutex(&prog->mtx, &prog->is_running, 1);
 	while (1)

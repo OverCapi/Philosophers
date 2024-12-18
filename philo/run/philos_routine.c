@@ -6,7 +6,7 @@
 /*   By: llemmel <llemmel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 14:52:59 by llemmel           #+#    #+#             */
-/*   Updated: 2024/12/17 18:36:00 by llemmel          ###   ########.fr       */
+/*   Updated: 2024/12/18 16:04:46 by llemmel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ void	*philos_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	printf("philo %d\n", philo->index);
 	set_int_mutex(&philo->mtx, &philo->is_ready, 1);
+	printf("philo %d is ready\n", philo->index);
 	if (!wait_start(philo))
 		return (NULL);
 	if (philo->index % 2 == 1)
